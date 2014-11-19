@@ -27,8 +27,8 @@ public class Application
 	 * @param candidate The candidate from OCSF Server
 	 * @return 
 	 */
-	public boolean apply(Candidate candidate)
+	public boolean apply()	// THIS IS SUPER NOT RIGHT
 	{
-		boolean 
+		return true;
 	}
 }
