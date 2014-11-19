@@ -13,8 +13,13 @@ public class Standard
 	private String description;
 	private Boolean isFulfilled;
 	
-	public Standard()
+	public Standard(String description)
 	{
-		
+		this.description = description;
 	}
+	
+	public String getDescription() { return this.description; }
+	public boolean getIsFulfilled() { return this.isFulfilled; }
+	
+	public void setIfFulfilled(boolean answer) { this.isFulfilled = answer; }
 }
