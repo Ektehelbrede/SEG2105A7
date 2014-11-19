@@ -11,8 +11,14 @@ public class Timeslot
 	private String interviewerName;
 	private String intervieweeName;
 	
-	public Timeslot()
+	public Timeslot(String time, String interviewer, String interviewee)
 	{
-		
+		this.time = time;
+		this.interviewerName = interviewer;
+		this.intervieweeName = interviewee;
 	}
+	
+	public String getTime() { return this.time; }
+	public String getInterviewerName() { return this.interviewerName; }
+	public String getIntervieweeName() { return this.intervieweeName; }
 }

@@ -1,7 +1,7 @@
 import java.util.*;
 
 /**
- * 1 -- * Candidate
+ * 1 -- 1 Application
  * 1 -- * Email
  * 1 -- * Timeslot
  * 
@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class Schedule 
 {
-	private List<Candidate> candidates;
+	private Application application;
 	private List<Email> emails;
 	
 	private List<Timeslot> availableTimeslots;	// Times that have not been scheduled
