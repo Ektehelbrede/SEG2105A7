@@ -18,6 +18,7 @@ public class Score
 	private Candidate candidate;				// 1 -- 1 Candidate
 	
 	// --------------
+	private final int MINIMUM_SCORE = 6;
 	private int currentScoreTotal;
 	
 	public Score(Candidate candidate, Application application)
@@ -34,9 +35,39 @@ public class Score
 		listOfQuestions.add(new Question("Are you fluent in french?", 3, this));	// CURRENT MAXIMUM OF 12 POINTS. SUGGESTING A MINIMUM OF 6?
 	}
 	
+	/**
+	 * Evaluate's the candidate's responses to the list of questions.
+	 * 
+	 * @param responses The candidate's responses.
+	 */
+	public void evaluate(String responses)
+	{
+		currentScoreTotal = 0;
+		
+		for (int i = 0; i < responses.length(); i++)
+		{
+			if (responses.charAt(i) == 'y')
+			{
+				currentScoreTotal += listOfQuestions.get(i).getPointValue();
+			}
+		}
+		
+		candidate.setScoreAchieved(currentScoreTotal);
+		
+		if (currentScoreTotal >= MINIMUM_SCORE)
+		{
+			candidate.setIsQualified(true);
+		}
+	}
+	
 	public String getQuestion(int indexOfQuestion)
 	{
 		return listOfQuestions.get(indexOfQuestion).getDescription();
+	}
+	
+	public int getMinimumScore() 
+	{ 
+		return this.MINIMUM_SCORE; 
 	}
 	
 	public int numberOfQuestions()

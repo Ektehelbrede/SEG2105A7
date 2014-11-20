@@ -10,6 +10,7 @@ public class Candidate
 	// Associations
 	private Application application;	// * -- 1 Application
 	private Score score;				// 1 -- 1 Score
+	private Timeslot scheduledTime;		// 1 -- 1 Timeslot
 	
 	// --------------
 	private String username;
@@ -47,4 +48,6 @@ public class Candidate
 	
 	public void setIsQualified(boolean qualified) { this.isQualified = qualified; }
 	public void setScore(Score score) { this.score = score; }
+	public void setConnection(ConnectionToClient client) { this.client = client; }
+	public void setScoreAchieved(int score) { this.scoreAchieved = score; }
 }

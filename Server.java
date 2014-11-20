@@ -41,10 +41,6 @@ public class Server extends AbstractServer
 	public void handleMessageFromClient
 		(Object message, ConnectionToClient client)
 	{
-		/*
-		 * COMMANDS:
-		 * message.toString().startsWith("#login") && client.getInfo("ID") == null, etc
-		 */
 		String msg = message.toString();
 		
 		if (msg.startsWith("#connect"))
@@ -54,10 +50,21 @@ public class Server extends AbstractServer
 				client.sendToClient("Please choose from the following commands:"
 					+ "\n#createaccount <username, password; emailaddress>"
 					+ "\n#login <username, password>"
-					+ "\n#qualificationrequirements" + "\nsubmitqualificationresponse <answer>"
-					+ "\n#requestapplication" 
-					+ "\n#submitapplication <1. answer 2. answer 3. answer 4. answer>"
-					+ "\n#availableappointments" + "\n#requestappointment <time>");
+					+ "\nUse the #help command for additional options.");
+			}
+			catch (IOException e) {}
+		}
+		
+		else if (msg.startsWith("#help"))
+		{
+			try
+			{
+				client.sendToClient("Here are some additional commands, please ensure that you"
+						+ " complete the application process in the correct order:"
+						+ "\n#qualificationrequirements" + "\nsubmitqualificationresponse <answer>"
+						+ "\n#requestapplication" 
+						+ "\n#submitapplication <1. answer 2. answer 3. answer 4. answer>"
+						+ "\n#availableappointments" + "\n#requestappointment <time>");
 			}
 			catch (IOException e) {}
 		}
@@ -80,25 +87,26 @@ public class Server extends AbstractServer
 		else if (msg.startsWith("#qualificationrequirements"))
 		{
 			try{client.sendToClient("Requesting list of requirements...");}catch(IOException e){}
-			application.getQualificationRequirements(client);
+			application.getQualificationRequirements((int)client.getInfo("index"));
 		}
 		
 		else if (msg.startsWith("#submitqualificationresponse"))
 		{
 			try{client.sendToClient("Submitting response...");}catch(IOException e){}
 			application.submitQualificationResponse(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), 
-				(int)client.getInfo("index"), client);
+				(int)client.getInfo("index"));
 		}
 		
 		else if (msg.startsWith("#requestapplication"))
 		{
 			try{client.sendToClient("Requesting list of questions...");}catch(IOException e){}
-			application.getApplication((int)client.getInfo("index"), client);
+			application.getApplication((int)client.getInfo("index"));
 		}
 		
 		else if (msg.startsWith("#submitapplication"))
 		{
-			
+			try{client.sendToClient("Submitting responses...");}catch(IOException e){}
+			application.submitApplication(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), (int)client.getInfo("index"));
 		}
 		
 		else if (msg.startsWith("#"))
@@ -110,9 +118,7 @@ public class Server extends AbstractServer
 			catch (IOException e) {}
 		}
 		
-		// else
 		serverUI.display("Message received: " + message.toString());
-		//this.sendToApplication(message);
 	}
 	
 	public void handleMessageFromApplication

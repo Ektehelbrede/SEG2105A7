@@ -42,7 +42,7 @@ public class Application
 		candidates.add(new Candidate(username, password, emailAddress, client, this));
 		scores.add(new Score(candidates.get(candidates.size() - 1), this));
 		candidates.get(candidates.size() - 1).setScore(scores.get(scores.size() - 1));
-		server.handleMessageFromApplication("New user created, to login please use the command #login <username, password>", client);
+		sendMessageToServer("New user created, to login please use the command #login <username, password>", client);
 	}
 	
 	/**
@@ -63,15 +63,16 @@ public class Application
 		{	
 			if (candidates.get(i).getUsername().equals(username) && candidates.get(i).getPassword().equals(password))
 			{	
+				candidates.get(i).setConnection(client);
 				client.setInfo("index", i);
-				server.handleMessageFromApplication("Successfully logged in.", client);
+				sendMessageToServer("Successfully logged in.", client);
 				wasFound = true;
 				break;
 			}
 			
 			if (candidates.get(i).getUsername().equals(username) && !(candidates.get(i).getPassword().equals(password)))
 			{	
-				server.handleMessageFromApplication("Invalid password, please login again.", client);
+				sendMessageToServer("Invalid password, please login again.", client);
 				wasFound = true;
 				break;
 			}
@@ -79,7 +80,7 @@ public class Application
 		
 		if (!wasFound)
 		{
-			server.handleMessageFromApplication("Please check your username and password and try again. Or, create "
+			sendMessageToServer("Please check your username and password and try again. Or, create "
 				+ "a new account using the command #createaccount <username, password; emailaddress>", client);
 		}
 	}
@@ -88,17 +89,19 @@ public class Application
 	 * This method prints the various qualifications that are required to apply for an interview.
 	 * [NEEDS TO CHECK THAT THE USER EXISTS AND IS LOGGED IN.]
 	 * 
-	 * @param client The client that requested the list of requirements.
+	 * @param indexOfCandidate The index of the candidate in candidates.
 	 */
-	public void getQualificationRequirements(ConnectionToClient client)
+	public void getQualificationRequirements(int indexOfCandidate)
 	{
 		for (int i = 0; i < standards.size(); i++)
 		{
-			server.handleMessageFromApplication("" + Integer.toString(i + 1) + ": " + standards.get(i).getDescription(), client);
+			sendMessageToServer("" + Integer.toString(i + 1) + ": " + standards.get(i).getDescription(), 
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
 		}
 		
-		server.handleMessageFromApplication("Please use the command #submitqualificationresponse <answer> to"
-			+ " submit either yes or no depending on if you meet the requirements or not.", client);
+		sendMessageToServer("Please use the command #submitqualificationresponse <answer> to"
+			+ " submit either yes or no depending on if you meet the requirements or not.", 
+			candidates.get(indexOfCandidate).getConnectionToCandidate());
 	}
 	
 	/**
@@ -107,22 +110,22 @@ public class Application
 	 * 
 	 * @param response The client's response to the list of qualifications.
 	 * @param indexOfCandidate The index of the candidate in candidates.
-	 * @param client The client submitting the response.
 	 */
-	public void submitQualificationResponse(String response ,int indexOfCandidate, ConnectionToClient client)
+	public void submitQualificationResponse(String response ,int indexOfCandidate)
 	{
 		if (response.equals("yes") || response.equals("true"))
 		{
 			candidates.get(indexOfCandidate).setIsQualified(true);
-			server.handleMessageFromApplication("Thank you! Please continue with your application by"
-				+ " using the command #requestapplication", client);
+			sendMessageToServer("Thank you! Please continue with your application by"
+				+ " using the command #requestapplication", candidates.get(indexOfCandidate).getConnectionToCandidate());
 		}
 		
 		else
 		{
 			candidates.get(indexOfCandidate).setIsQualified(false);
-			server.handleMessageFromApplication("We're sorry, but you do not meet the requirements for"
-				+ " an application at this time. Please keep us in mind if your qualifications change!", client);
+			sendMessageToServer("We're sorry, but you do not meet the requirements for"
+				+ " an application at this time. Please keep us in mind if your qualifications change!", 
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
 		}
 	}
 	
@@ -132,26 +135,69 @@ public class Application
 	 * [NEEDS TO CHECK THAT THE USER EXISTS, IS LOGGED IN, AND IS QUALIFIED.]
 	 * 
 	 * @param indexOfCandidate The index of the candidate in candidates.
-	 * @param client The client that requested the application questions.
 	 */
-	public void getApplication(int indexOfCandidate, ConnectionToClient client)
+	public void getApplication(int indexOfCandidate)
 	{
 		Score score = candidates.get(indexOfCandidate).getScore();
 		
 		for (int i = 0; i < score.numberOfQuestions(); i++)
 		{
-			server.handleMessageFromApplication("" + Integer.toString(i + 1) + score.getQuestion(i), client);
+			sendMessageToServer("" + Integer.toString(i + 1) + ": " + score.getQuestion(i), 
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+		}
+		
+		sendMessageToServer("Please use the command #submitapplication <aaaaaaa> to respond."
+				+ " Encode each 'a' with a y or n depending on your response to the question.",
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+	}
+	
+	/**
+	 * This method receives the candidate's responses to the application questions, and calls
+	 * the evaluate method of that client's Score. If the client meets the minimum requirements
+	 * for an interview, an email will be sent requesting that they schedule one.
+	 * [NEEDS TO CHECK IF THE USER EXISTS, IS LOGGED IN, AND IS QUALIFIED.]
+	 * 
+	 * IF AN EXCEPTION TO THE CLIENT OCCURS WHEN SUBMITTING AN APPLICATION, PLEASE ENSURE THAT
+	 * ANY ANTI VIRUS IS TURNED OFF OR THIS PROGRAM IS WHITELISTED - THE EMAIL CANNOT BE SENT.
+	 * 
+	 * @param responses The candidates responses to be evaluated.
+	 * @param indexOfCandidate The index of the candidate in candidates.
+	 */
+	public void submitApplication(String responses, int indexOfCandidate)
+	{
+		candidates.get(indexOfCandidate).getScore().evaluate(responses);
+		sendMessageToServer("Successfully evaluated your application.",
+			candidates.get(indexOfCandidate).getConnectionToCandidate());
+		
+		if (candidates.get(indexOfCandidate).getIsQualified() == true)
+		{
+			sendMessageToServer("Sending an interview request email.",
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+			sendRequestForInterviewEmail(candidates.get(indexOfCandidate));
 		}
 	}
 	
-	public void submitApplication(boolean[] responses, int indexOfCandidate, ConnectionToClient client)
-	{
-		
-	}
 	
 	public void scheduleAppointment()
 	{
 		
+	}
+	
+	/**
+	 * This method is responsible for sending the message to the server, which in turn will
+	 * send it to the client.
+	 * 
+	 * @param message The message to be sent.
+	 * @param client The client to send the message to.
+	 */
+	public void sendMessageToServer(String message, ConnectionToClient client)
+	{
+		server.handleMessageFromApplication(message, client);
+	}
+	
+	public void sendRequestForInterviewEmail(Candidate candidate)
+	{
+		emails.add(new Email(candidate));
 	}
 }
 

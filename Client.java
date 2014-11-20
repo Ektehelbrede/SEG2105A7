@@ -50,32 +50,16 @@ public class Client extends AbstractClient
 	{
 		// Check if the message is intended to be a command.
 		
-			/*
-			 * #login
-			 * #apply
-			 * #schedule
-			 */
-			
-			/*
-			 * SOME USEFUL THINGS:
-			 * message.equals("#command"){}
-			 * message.startsWith("#command"){}
-			 * message.substring(message.indexOf("<") + 1. message.indexOf(">"))
-			 */
-			
-			
-		
-		
-		
-			try
-			{
-				sendToServer(message);
-			}
-			catch (IOException e)
-			{
-				clientUI.display("Could not send message to server. Terminating client.");
-				quit();
-			}
+		// Not a command
+		try
+		{
+			sendToServer(message);
+		}
+		catch (IOException e)
+		{
+			clientUI.display("Could not send message to server. Terminating client.");
+			quit();
+		}
 		
 	}
 	

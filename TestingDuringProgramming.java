@@ -2,10 +2,14 @@ public class TestingDuringProgramming
 {
 	public static void main(String[] args)
 	{
-		Candidate candidate = new Candidate("John Street", "1234", "michael.mckee92@gmail.com");
-		Timeslot timeslot = new Timeslot("March 3 2018, 4:00pm", "Higgs Boson", "John Street");
+		String testString = "<yyyyy>";
+		String beingPassed = testString.substring(testString.indexOf("<") + 1, testString.indexOf(">"));
 		
-		new Email(candidate);
-		new Email(candidate, timeslot);
+		System.out.println(beingPassed);
+		
+		for (int i = 0; i < beingPassed.length(); i++)
+		{
+			System.out.println(beingPassed.charAt(i));
+		}
 	}
 }
