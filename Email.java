@@ -1,12 +1,18 @@
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 /**
  * Email is responsible for creating a standard email to be
@@ -63,7 +69,7 @@ public class Email
 	private void createScheduleConfirmationEmail(Candidate candidateToPersonalizeEmailFor,
 		Timeslot timeScheduled)
 	{
-		this.bodyOfEmail = "" + candidateToPersonalizeEmailFor.getUsername() + ",\n"
+		this.bodyOfEmail = "" + candidateToPersonalizeEmailFor.getUsername() + ",\n\n"
 			+ "Thank you for scheduling an appointment for: " + timeScheduled.getTime()
 			+ "\n\n" + "I look forward to meeting you" + ",\n" 
 			+ timeScheduled.getInterviewerName();
@@ -78,13 +84,23 @@ public class Email
 	 */
 	private void createRequestForInterviewEmail(Candidate candidateToPersonalizeEmailFor)
 	{
-		this.bodyOfEmail = "" + candidateToPersonalizeEmailFor.getUsername() + ",\n"
+		this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
+				+ "<p>Thank you for completing the application questions. Connect HR would "
+				+ "like to request that you schedule an interview appointment at your "
+				+ "earliest convenience." + "</p>" + "<p>In order to schedule an appointment "
+				+ "please log into the account that you used to complete the application "
+				+ "questions with and use the <#schedule> function." + "</p>"
+				+ "<p>Thank you for considering Connect," + "<br>" + "Connect HR</p>"
+				+ "<img src=\"cid:image\"/>";
+		
+		
+		/*this.bodyOfEmail = "" + candidateToPersonalizeEmailFor.getUsername() + ",\n\n"
 			+ "Thank you for completing the application questions. Connect HR would "
 			+ "like to request that you schedule an interview appointment at your "
 			+ "earliest convenience." + "\n\n" + "In order to schedule an appointment "
 			+ "please log into the account that you used to complete the application "
 			+ "questions with and use the <#schedule> function." + "\n\n"
-			+ "Thank you for considering Connect," + "\n" + "Connect HR";
+			+ "Thank you for considering Connect," + "\n" + "Connect HR";*/
 	}
 	
 	/**
@@ -128,8 +144,18 @@ public class Email
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message.setSubject(subject);
-			message.setText(this.getBodyOfEmail());
+			//message.setText(this.getBodyOfEmail());
+			MimeMultipart multipart = new MimeMultipart("related");
+			BodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setContent(this.getBodyOfEmail(),"text/html");
+			multipart.addBodyPart(messageBodyPart);
+			messageBodyPart = new MimeBodyPart();
+			DataSource fds = new FileDataSource("C:/Users/Daniel/workspace/PROJECT/Logo.png");
+			messageBodyPart.setDataHandler(new DataHandler (fds));
+			messageBodyPart.setHeader("Content-ID", "<image>");
 			
+			multipart.addBodyPart(messageBodyPart);
+			message.setContent(multipart);
 			// Send the email.
 			Transport.send(message);
 		}

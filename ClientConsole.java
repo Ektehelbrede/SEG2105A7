@@ -94,19 +94,10 @@ public class ClientConsole implements ChatIF
 		 * Login ID for the user to be known as. Must be provided, else
 		 * the client will quit, no default will be provided.
 		 */
-		try
-		{
-			loginId = args[0];
-		}
-		catch (ArrayIndexOutOfBoundsException exception)
-		{
-			System.out.println("Please pass a user ID.");
-			System.exit(1);
-		}
 		
 		try
 	    {
-	      host = args[1];	
+	      host = args[0];	
 	    }
 	    catch (ArrayIndexOutOfBoundsException e)
 	    {
@@ -115,7 +106,7 @@ public class ClientConsole implements ChatIF
 		
 		try
 	    {
-	    	port = Integer.parseInt(args[2]);	
+	    	port = Integer.parseInt(args[1]);	
 	    }
 	    catch (ArrayIndexOutOfBoundsException ex)
 	    {
