@@ -11,10 +11,16 @@ public class Question
 	
 	// --------------
 	private String description;
-	// Something to track possible answer: point worth
+	private int pointValue;
 	
-	public Question()
+	public Question(String description, int pointValue, Score score)
 	{
+		this.score = score;
+		this.description= description;
+		this.pointValue= pointValue;
 		
 	}
+	
+	public String getDescription(){return description;}
+	public int getPointValue(){return pointValue;}
 }

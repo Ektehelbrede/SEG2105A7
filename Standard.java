@@ -11,15 +11,12 @@ public class Standard
 	
 	// --------------
 	private String description;
-	private Boolean isFulfilled;
 	
-	public Standard(String description)
+	public Standard(String description, Application application)
 	{
 		this.description = description;
+		this.application = application;
 	}
 	
 	public String getDescription() { return this.description; }
-	public boolean getIsFulfilled() { return this.isFulfilled; }
-	
-	public void setIfFulfilled(boolean answer) { this.isFulfilled = answer; }
 }

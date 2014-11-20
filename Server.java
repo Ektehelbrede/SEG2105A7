@@ -17,6 +17,7 @@ public class Server extends AbstractServer
 	 * display method in the client.
 	 */
 	ChatIF serverUI;
+	Application application;
 	
 	/**
 	 * Constructs an instance of the server.
@@ -28,6 +29,7 @@ public class Server extends AbstractServer
 	{
 		super(port);
 		this.serverUI = serverUI;
+		this.application = new Application(this);
 	}
 	
 	/**
@@ -43,12 +45,93 @@ public class Server extends AbstractServer
 		 * COMMANDS:
 		 * message.toString().startsWith("#login") && client.getInfo("ID") == null, etc
 		 */
+		String msg = message.toString();
+		
+		if (msg.startsWith("#connect"))
+		{
+			try
+			{
+				client.sendToClient("Please choose from the following commands:"
+					+ "\n#createaccount <username, password; emailaddress>"
+					+ "\n#login <username, password>"
+					+ "\n#qualificationrequirements" + "\nsubmitqualificationresponse <answer>"
+					+ "\n#requestapplication" 
+					+ "\n#submitapplication <1. answer 2. answer 3. answer 4. answer>"
+					+ "\n#availableappointments" + "\n#requestappointment <time>");
+			}
+			catch (IOException e) {}
+		}
+		
+		else if (msg.startsWith("#createaccount"))
+		{
+			try{client.sendToClient("Creating account...");}catch(IOException e){}
+			application.createAccount(msg.substring(msg.indexOf("<") + 1, msg.indexOf(",")), 
+					msg.substring(msg.indexOf(",") + 1, msg.indexOf(";")), 
+					msg.substring(msg.indexOf(";") + 1, msg.indexOf(">")), client);
+		}
+		
+		else if (msg.startsWith("#login"))
+		{
+			try{client.sendToClient("Logging in...");}catch(IOException e){}
+			application.login(msg.substring(msg.indexOf("<") + 1, msg.indexOf(",")), 
+					msg.substring(msg.indexOf(",") + 1, msg.indexOf(">")), client);
+		}
+		
+		else if (msg.startsWith("#qualificationrequirements"))
+		{
+			try{client.sendToClient("Requesting list of requirements...");}catch(IOException e){}
+			application.getQualificationRequirements(client);
+		}
+		
+		else if (msg.startsWith("#submitqualificationresponse"))
+		{
+			try{client.sendToClient("Submitting response...");}catch(IOException e){}
+			application.submitQualificationResponse(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), 
+				(int)client.getInfo("index"), client);
+		}
+		
+		else if (msg.startsWith("#requestapplication"))
+		{
+			try{client.sendToClient("Requesting list of questions...");}catch(IOException e){}
+			application.getApplication((int)client.getInfo("index"), client);
+		}
+		
+		else if (msg.startsWith("#submitapplication"))
+		{
+			
+		}
+		
+		else if (msg.startsWith("#"))
+		{
+			try
+			{
+				client.sendToClient("Invalid command, please try again.");
+			}
+			catch (IOException e) {}
+		}
 		
 		// else
-		serverUI.display("Message received: " + message.toString() + " from "
-			+ client.getInfo("ID"));
-		this.sendToAllClients(client.getInfo("ID").toString() + ": " + message);
+		serverUI.display("Message received: " + message.toString());
+		//this.sendToApplication(message);
 	}
+	
+	public void handleMessageFromApplication
+		(Object message, ConnectionToClient client)
+	{
+		/*
+		 * COMMANDS:
+		 * message.toString().startsWith("#login") && client.getInfo("ID") == null, etc
+		 */
+		
+		// else
+		serverUI.display("Message received: " + message.toString());
+		try
+		{
+			client.sendToClient(message);
+		}
+		catch (Exception ex) {}
+	}
+	
 	
 	/**
 	 * This method handles any messages received from the server.

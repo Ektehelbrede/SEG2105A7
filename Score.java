@@ -15,12 +15,32 @@ public class Score
 	// Associations
 	private Application application;			// * -- 1 Application
 	private List<Question> listOfQuestions;		// 1 -- * Question
+	private Candidate candidate;				// 1 -- 1 Candidate
 	
 	// --------------
 	private int currentScoreTotal;
 	
-	public Score()
+	public Score(Candidate candidate, Application application)
 	{
+		this.candidate = candidate;
+		this.application = application;
+		listOfQuestions = new ArrayList<Question>();
+		currentScoreTotal = 0;
 		
+		listOfQuestions.add(new Question("Do you have any relevant past work experience?", 3, this));
+		listOfQuestions.add(new Question("Do you have more than 40 hours of commmunity service?", 1, this));
+		listOfQuestions.add(new Question("Do you possess a college diploma or greater?", 3, this));
+		listOfQuestions.add(new Question("Do you speak more than one language?", 2, this));
+		listOfQuestions.add(new Question("Are you fluent in french?", 3, this));	// CURRENT MAXIMUM OF 12 POINTS. SUGGESTING A MINIMUM OF 6?
+	}
+	
+	public String getQuestion(int indexOfQuestion)
+	{
+		return listOfQuestions.get(indexOfQuestion).getDescription();
+	}
+	
+	public int numberOfQuestions()
+	{
+		return this.listOfQuestions.size();
 	}
 }

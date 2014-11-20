@@ -49,8 +49,7 @@ public class Client extends AbstractClient
 	public void handleMessageFromClientUI(String message)
 	{
 		// Check if the message is intended to be a command.
-		if (message.startsWith("#"))
-		{
+		
 			/*
 			 * #login
 			 * #apply
@@ -63,10 +62,11 @@ public class Client extends AbstractClient
 			 * message.startsWith("#command"){}
 			 * message.substring(message.indexOf("<") + 1. message.indexOf(">"))
 			 */
-		}
+			
+			
 		
-		else
-		{
+		
+		
 			try
 			{
 				sendToServer(message);
@@ -76,7 +76,7 @@ public class Client extends AbstractClient
 				clientUI.display("Could not send message to server. Terminating client.");
 				quit();
 			}
-		}
+		
 	}
 	
 	/**
@@ -108,23 +108,23 @@ public class Client extends AbstractClient
 	 */
 	protected void connectionException(Exception exception)
 	{
-		clientUI.display("The server has terminated the connection.");
+		clientUI.display("The server has terminated the connection. Please ensure that"
+				+ " you are progressing through the application process in the correct order.");
 	}
 	
 	/**
 	 * Whenever a client connects to a server, it should send the message
-	 * #login <loginid> to the server.
+	 * #connect to the server.
 	 */
 	protected void connectionEstablished()
 	{
 		try
 		{
-			sendToServer("login <" + loginId + ">");
+			sendToServer("#connect");
 		}
 		catch (IOException e)
 		{
-			clientUI.display("Could not send message to server. Terminating client.");
-			quit();
+			clientUI.display("Could not connect to the server.");
 		}
 	}
 }
