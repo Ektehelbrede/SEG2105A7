@@ -44,7 +44,7 @@ public class Score
 	{
 		currentScoreTotal = 0;
 		
-		for (int i = 0; i < responses.length(); i++)
+		for (int i = 0; i < listOfQuestions.size(); i++)
 		{
 			if (responses.charAt(i) == 'y')
 			{
@@ -56,7 +56,7 @@ public class Score
 		
 		if (currentScoreTotal >= MINIMUM_SCORE)
 		{
-			candidate.setIsQualified(true);
+			candidate.setMeetsMinimumScore(true);
 		}
 	}
 	

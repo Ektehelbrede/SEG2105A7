@@ -14,6 +14,7 @@ public class Application
 	private List<Standard> standards;		// 1 -- 2..* Standard
 	private List<Score> scores;				// 1 -- * Score
 	private List<Email> emails;				// 1 -- * Email
+	private Schedule schedule;
 	
 	private Server server;	
 	
@@ -23,6 +24,7 @@ public class Application
 		this.standards = new ArrayList<Standard>();
 		this.scores = new ArrayList<Score>();
 		this.emails = new ArrayList<Email>();
+		this.schedule = new Schedule(this);
 		
 		this.server = server;
 		
@@ -117,7 +119,8 @@ public class Application
 		{
 			candidates.get(indexOfCandidate).setIsQualified(true);
 			sendMessageToServer("Thank you! Please continue with your application by"
-				+ " using the command #requestapplication", candidates.get(indexOfCandidate).getConnectionToCandidate());
+				+ " using the command #requestapplication", 
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
 		}
 		
 		else
@@ -147,8 +150,8 @@ public class Application
 		}
 		
 		sendMessageToServer("Please use the command #submitapplication <aaaaaaa> to respond."
-				+ " Encode each 'a' with a y or n depending on your response to the question.",
-				candidates.get(indexOfCandidate).getConnectionToCandidate());
+			+ " Encode each 'a' with a y or n depending on your response to the question.",
+			candidates.get(indexOfCandidate).getConnectionToCandidate());
 	}
 	
 	/**
@@ -174,10 +177,64 @@ public class Application
 		sendRequestForInterviewEmail(candidates.get(indexOfCandidate));
 	}
 	
+	/**
+	 * The method prints the currently available interview times to the candidate.
+	 * 
+	 * @param indexOfCandidate The index of the candidate in candidates.
+	 */
+	public void getSchedule(int indexOfCandidate)
+	{
+		for (int i = 0; i < schedule.numberOfAvailableTimeslots(); i++)
+		{
+			sendMessageToServer(schedule.getAvailableTimes(i), 
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+		}
+		
+		sendMessageToServer("Please use the command #submitschedulerequest <...> to respond."
+			+ " Ensure that the date and time are copied exactly in place of ... (ex. <04/12/28 2:00>) ",
+			candidates.get(indexOfCandidate).getConnectionToCandidate());
+	}
 	
+	/**
+	 * This method receives the candidate's response indicating the time they
+	 * wish to schedule an appointment for. 
+	 * 
+	 * @param response The time the candidate wishes to schedule an appointment for.
+	 * @param indexOfCandidate The index of the candidate in candidates.
+	 */
 	public void scheduleAppointment(String response, int indexOfCandidate)
 	{
+		boolean successfullyScheduled = schedule.scheduleInterview(response);
 		
+		if (successfullyScheduled)
+		{
+			candidates.get(indexOfCandidate).setIsScheduled(true);
+			sendMessageToServer("Successfully scheduled an interview for: " + response
+				+ "\n" + "Sending a confirmation email to the address listed in your account.",
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+			sendScheduleConfirmationEmail(candidates.get(indexOfCandidate));
+		}
+		
+		else
+		{
+			sendMessageToServer("Your response was: " + response
+					+ "\n" + "This time is not currently available, please try to schedule again."
+					+ "\n" + "Use the command #requestschedule to print the list of available times again.",
+					candidates.get(indexOfCandidate).getConnectionToCandidate());
+		}
+	}
+	
+	/**
+	 * Prints the candidate username, password, email address, and score achieved to
+	 * the Client. 
+	 * FOR DEBUGGING PURPOSES.
+	 * 
+	 * @param indexOfCandidate The index of the candidate in candidates to print information about.
+	 */
+	public void getCandidateInformation(int indexOfCandidate)
+	{
+		sendMessageToServer(candidates.get(indexOfCandidate).toString(), 
+			candidates.get(indexOfCandidate).getConnectionToCandidate());
 	}
 	
 	/**
@@ -195,6 +252,21 @@ public class Application
 	public void sendRequestForInterviewEmail(Candidate candidate)
 	{
 		emails.add(new Email(candidate));
+	}
+	
+	public void sendScheduleConfirmationEmail(Candidate candidate)
+	{
+		emails.add(new Email(candidate, candidate.getScheduledTime()));
+	}
+	
+	public void addStandard(String description)
+	{
+		
+	}
+	
+	public void addQuestion(String description, int pointValue)
+	{
+		
 	}
 }
 

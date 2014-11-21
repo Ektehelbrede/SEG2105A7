@@ -1,13 +1,16 @@
 /**
- * This TestCase has a user successfully going through the process of
+ * This TestCase has a user unsuccessfully going through the process of
  * submitting qualifications and responses to the application questions.
+ * The user is unsuccessful due to the lack of "points" they earn for
+ * their responses to the application questions (no experience, no community
+ * service, etc).
  * 
  * An email will be sent to the email address if the testcase is successful.
  * 
  * @author Daniel Rosales and Michael Mckee
  * @version November 2014
  */
-public class TestCaseApplicationSuccess
+public class TestCaseApplicationFailure
 {
 	public static void main(String[] args)
 	{
@@ -40,7 +43,7 @@ public class TestCaseApplicationSuccess
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
-		client.handleMessageFromTestCases("#submitapplication <yyyyy>");
+		client.handleMessageFromTestCases("#submitapplication <nnnnn>");
 		try {
 		    Thread.sleep(5000);                 //1000 milliseconds is one second.
 		} catch(InterruptedException ex) {

@@ -109,6 +109,24 @@ public class Server extends AbstractServer
 			application.submitApplication(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), (int)client.getInfo("index"));
 		}
 		
+		else if (msg.startsWith("#getmyinformation"))	// FOR DEBUGGING
+		{
+			try{client.sendToClient("GETTING CANDIDATE INFORMATION [DEBUGGING]...");}catch(IOException e){}
+			application.getCandidateInformation((int)client.getInfo("index"));
+		}
+		
+		else if (msg.startsWith("#requestschedule"))
+		{
+			try{client.sendToClient("Requesting available interview times...");}catch(IOException e){}
+			application.getSchedule((int)client.getInfo("index"));
+		}
+		
+		else if (msg.startsWith("#submitschedulerequest"))	
+		{
+			try{client.sendToClient("Submitting request...");}catch(IOException e){}
+			application.scheduleAppointment(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), (int)client.getInfo("index"));
+		}
+		
 		else if (msg.startsWith("#"))
 		{
 			try
@@ -117,8 +135,6 @@ public class Server extends AbstractServer
 			}
 			catch (IOException e) {}
 		}
-		
-		serverUI.display("Message received: " + message.toString());
 	}
 	
 	public void handleMessageFromApplication
@@ -130,7 +146,6 @@ public class Server extends AbstractServer
 		 */
 		
 		// else
-		serverUI.display("Message received: " + message.toString());
 		try
 		{
 			client.sendToClient(message);

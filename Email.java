@@ -71,8 +71,8 @@ public class Email
 	{
 		this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
 			+ "<p>Thank you for scheduling an appointment for: " + timeScheduled.getTime()
-			+ "</p>" + "I look forward to meeting you" + ",<br>" 
-			+ timeScheduled.getInterviewerName() + "</p>"
+			+ "</p>" + "<p>I look forward to meeting you" + ",<br>" 
+			+ timeScheduled.getInterviewerName() + " </p>"
 			+ "<img src=\"cid:image\"/>";
 	}
 	
@@ -85,7 +85,7 @@ public class Email
 	 */
 	private void createRequestForInterviewEmail(Candidate candidateToPersonalizeEmailFor)
 	{
-		if (candidateToPersonalizeEmailFor.getIsQualified())
+		if (candidateToPersonalizeEmailFor.getMeetsMinimumScore())
 		{
 			this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
 				+ "<p>Thank you for completing the application questions. Connect HR would "
@@ -93,7 +93,8 @@ public class Email
 				+ "earliest convenience." + "</p>" + "<p>In order to schedule an appointment "
 				+ "please log into the account that you used to complete the application "
 				+ "questions with and use the <#schedule> function." + "</p>"
-				+ "<p>Thank you for considering Connect," + "<br>" + "Connect HR</p>"
+				+ "<p>Thank you for considering Connect," + "</p>" + "<p>" + "Elayne Sinclair" + "<br>"
+				+ "Connect Human Resources Department</p>"
 				+ "<img src=\"cid:image\"/>";
 		}
 		
@@ -102,7 +103,8 @@ public class Email
 			this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
 				+ "Thank you for completing the application questions. Sadly, you do not currently "
 				+ "meet the requirements for a position with Connect</p>"
-				+ "<p>Thank you for considering Connect," + "<br>" + "Connect HR</p>"
+				+ "<p>Thank you for considering Connect," + "</p>" + "<p>" + "Elayne Sinclair" + "<br>"
+				+ "Connect Human Resources Department</p>"
 				+ "<img src=\"cid:image\"/>";
 		}
 	}
@@ -154,7 +156,7 @@ public class Email
 			messageBodyPart.setContent(this.getBodyOfEmail(),"text/html");
 			multipart.addBodyPart(messageBodyPart);
 			messageBodyPart = new MimeBodyPart();
-			DataSource fds = new FileDataSource("C:/Users/Daniel/workspace/PROJECT/Logo.png");
+			DataSource fds = new FileDataSource("C:/Users/Michael Mckee/Documents/GitHub/SEG2105A7/Logo.png");
 			messageBodyPart.setDataHandler(new DataHandler (fds));
 			messageBodyPart.setHeader("Content-ID", "<image>");
 			
