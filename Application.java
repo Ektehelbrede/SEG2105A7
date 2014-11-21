@@ -169,16 +169,13 @@ public class Application
 		sendMessageToServer("Successfully evaluated your application.",
 			candidates.get(indexOfCandidate).getConnectionToCandidate());
 		
-		if (candidates.get(indexOfCandidate).getIsQualified() == true)
-		{
-			sendMessageToServer("Sending an interview request email.",
-				candidates.get(indexOfCandidate).getConnectionToCandidate());
-			sendRequestForInterviewEmail(candidates.get(indexOfCandidate));
-		}
+		sendMessageToServer("Sending an email.",
+			candidates.get(indexOfCandidate).getConnectionToCandidate());
+		sendRequestForInterviewEmail(candidates.get(indexOfCandidate));
 	}
 	
 	
-	public void scheduleAppointment()
+	public void scheduleAppointment(String response, int indexOfCandidate)
 	{
 		
 	}

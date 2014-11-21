@@ -77,6 +77,11 @@ public class ClientConsole implements ChatIF
 		System.out.println("> " + message);
 	}
 	
+	public void handleMessageFromTestCases(String message)
+	{
+		client.handleMessageFromClientUI(message);
+	}
+	
 	/**
 	 * This method is responsible for the creation of the Client UI.
 	 * 

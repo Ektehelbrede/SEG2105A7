@@ -69,10 +69,11 @@ public class Email
 	private void createScheduleConfirmationEmail(Candidate candidateToPersonalizeEmailFor,
 		Timeslot timeScheduled)
 	{
-		this.bodyOfEmail = "" + candidateToPersonalizeEmailFor.getUsername() + ",\n\n"
-			+ "Thank you for scheduling an appointment for: " + timeScheduled.getTime()
-			+ "\n\n" + "I look forward to meeting you" + ",\n" 
-			+ timeScheduled.getInterviewerName();
+		this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
+			+ "<p>Thank you for scheduling an appointment for: " + timeScheduled.getTime()
+			+ "</p>" + "I look forward to meeting you" + ",<br>" 
+			+ timeScheduled.getInterviewerName() + "</p>"
+			+ "<img src=\"cid:image\"/>";
 	}
 	
 	/**
@@ -84,7 +85,9 @@ public class Email
 	 */
 	private void createRequestForInterviewEmail(Candidate candidateToPersonalizeEmailFor)
 	{
-		this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
+		if (candidateToPersonalizeEmailFor.getIsQualified())
+		{
+			this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
 				+ "<p>Thank you for completing the application questions. Connect HR would "
 				+ "like to request that you schedule an interview appointment at your "
 				+ "earliest convenience." + "</p>" + "<p>In order to schedule an appointment "
@@ -92,15 +95,16 @@ public class Email
 				+ "questions with and use the <#schedule> function." + "</p>"
 				+ "<p>Thank you for considering Connect," + "<br>" + "Connect HR</p>"
 				+ "<img src=\"cid:image\"/>";
+		}
 		
-		
-		/*this.bodyOfEmail = "" + candidateToPersonalizeEmailFor.getUsername() + ",\n\n"
-			+ "Thank you for completing the application questions. Connect HR would "
-			+ "like to request that you schedule an interview appointment at your "
-			+ "earliest convenience." + "\n\n" + "In order to schedule an appointment "
-			+ "please log into the account that you used to complete the application "
-			+ "questions with and use the <#schedule> function." + "\n\n"
-			+ "Thank you for considering Connect," + "\n" + "Connect HR";*/
+		else
+		{
+			this.bodyOfEmail = "<p>" + candidateToPersonalizeEmailFor.getUsername() + ",</p>"
+				+ "Thank you for completing the application questions. Sadly, you do not currently "
+				+ "meet the requirements for a position with Connect</p>"
+				+ "<p>Thank you for considering Connect," + "<br>" + "Connect HR</p>"
+				+ "<img src=\"cid:image\"/>";
+		}
 	}
 	
 	/**
