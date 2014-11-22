@@ -14,10 +14,9 @@ public class TestCaseApplicationFailure
 {
 	public static void main(String[] args)
 	{
-		ServerConsole server;
 		ClientConsole client;
 		
-		server = new ServerConsole(1520);
+		new ServerConsole(1520);
 		client = new ClientConsole("client", "localhost", 1520);
 		
 		try {

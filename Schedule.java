@@ -28,11 +28,11 @@ public class Schedule
 		this.availableTimeslots = new ArrayList<Timeslot>();
 		this.scheduledTimeslots = new ArrayList<Timeslot>();
 		
-		this.availableTimeslots.add(new Timeslot("08/05/15 4:00", null, "Jim Hudson"));
-		this.availableTimeslots.add(new Timeslot("08/05/15 5:00", null, "Jim Hudson"));
-		this.availableTimeslots.add(new Timeslot("09/05/15 3:00", null, "Kevin Thatcher"));
-		this.availableTimeslots.add(new Timeslot("09/05/15 4:00", null, "Margaret Chell"));
-		this.availableTimeslots.add(new Timeslot("09/05/15 5:00", null, "Margaret Chell"));
+		this.availableTimeslots.add(new Timeslot("08/05/15 4:00", "Jim Hudson", null));
+		this.availableTimeslots.add(new Timeslot("08/05/15 5:00", "Jim Hudson", null));
+		this.availableTimeslots.add(new Timeslot("09/05/15 3:00", "Kevin Thatcher", null));
+		this.availableTimeslots.add(new Timeslot("09/05/15 4:00", "Margaret Chell", null));
+		this.availableTimeslots.add(new Timeslot("09/05/15 5:00", "Margaret Chell", null));
 	}
 	
 	public String getAvailableTimes(int index)
@@ -50,7 +50,7 @@ public class Schedule
 		scheduledTimeslots.add(time);
 	}
 	
-	public boolean scheduleInterview(String response)
+	public boolean scheduleInterview(String response, Candidate candidate)
 	{
 		boolean wasAdded = false;
 		
@@ -58,7 +58,9 @@ public class Schedule
 		{
 			if (availableTimeslots.get(i).getTime().equals(response))
 			{
+				availableTimeslots.get(i).setIntervieweeName(candidate.getUsername());
 				addToScheduledTimeslots(availableTimeslots.remove(i));
+				candidate.setInterviewTime(scheduledTimeslots.get(scheduledTimeslots.size() - 1));
 				wasAdded = true;
 			}
 		}

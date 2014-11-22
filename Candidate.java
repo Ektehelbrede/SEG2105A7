@@ -56,6 +56,7 @@ public class Candidate
 	public void setConnection(ConnectionToClient client) { this.client = client; }
 	public void setScoreAchieved(int score) { this.scoreAchieved = score; }
 	public void setIsScheduled(boolean isScheduled) { this.isScheduled = isScheduled; }
+	public void setInterviewTime(Timeslot timeslot) { this.scheduledTime = timeslot; }
 	
 	public String toString()
 	{
@@ -65,7 +66,8 @@ public class Candidate
 			+ "ScoreAchieved: " + getScoreAchieved() + "\n"
 			+ "isQualified: " + getIsQualified() + "\n"
 			+ "meetsMinimumScore: " + getMeetsMinimumScore() + "\n"
-			+ "isScheduled: " + getIsScheduled();
+			+ "isScheduled: " + getIsScheduled()
+			+ "Timeslot: " + getScheduledTime();
 				
 		return candidate;
 	}

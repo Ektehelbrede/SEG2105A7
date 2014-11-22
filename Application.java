@@ -204,7 +204,7 @@ public class Application
 	 */
 	public void scheduleAppointment(String response, int indexOfCandidate)
 	{
-		boolean successfullyScheduled = schedule.scheduleInterview(response);
+		boolean successfullyScheduled = schedule.scheduleInterview(response, candidates.get(indexOfCandidate));
 		
 		if (successfullyScheduled)
 		{

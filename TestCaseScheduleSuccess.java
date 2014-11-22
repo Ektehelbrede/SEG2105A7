@@ -1,13 +1,16 @@
 /**
  * This TestCase has a user successfully going through the process of
  * submitting qualifications and responses to the application questions.
+ * Then the user successfully schedules an interview appointment.
  * 
- * An email will be sent to the email address if the testcase is successful.
+ * Two emails will be sent to the email address if the testcase is successful.
+ * One email will confirm success of the application process, while the other
+ * confirms the scheduled appointment.
  * 
  * @author Daniel Rosales and Michael Mckee
  * @version November 2014
  */
-public class TestCaseApplicationSuccess
+public class TestCaseScheduleSuccess
 {
 	public static void main(String[] args)
 	{
@@ -40,6 +43,12 @@ public class TestCaseApplicationSuccess
 		    Thread.currentThread().interrupt();
 		}
 		client.handleMessageFromTestCases("#submitapplication <yyyyy>");
+		try {
+		    Thread.sleep(5000);                 //1000 milliseconds is one second.
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		client.handleMessageFromTestCases("#submitschedulerequest <08/05/15 4:00>");
 		try {
 		    Thread.sleep(5000);                 //1000 milliseconds is one second.
 		} catch(InterruptedException ex) {

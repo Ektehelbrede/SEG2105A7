@@ -48,7 +48,7 @@ public class Email
 	public Email(Candidate candidateToPersonalizeEmailFor)
 	{
 		createRequestForInterviewEmail(candidateToPersonalizeEmailFor);
-		sendEmail(candidateToPersonalizeEmailFor, "Connect Application Success!");
+		sendEmail(candidateToPersonalizeEmailFor, "Connect Application");
 	}
 	
 	/**

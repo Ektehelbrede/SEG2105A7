@@ -23,4 +23,9 @@ public class Timeslot
 	public String getIntervieweeName() { return this.intervieweeName; }
 	
 	public void setIntervieweeName(String name) { this.intervieweeName = name; }
+	
+	public String toString()
+	{
+		return this.time + ":" + this.interviewerName + ":" + this.intervieweeName;
+	}
 }
