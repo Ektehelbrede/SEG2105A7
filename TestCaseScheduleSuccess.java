@@ -16,6 +16,7 @@ public class TestCaseScheduleSuccess
 	{
 		ClientConsole client;
 		
+		System.out.println("-- Creating Server and Client --");
 		new ServerConsole(1520);
 		client = new ClientConsole("client", "localhost", 1520);
 		
@@ -24,30 +25,41 @@ public class TestCaseScheduleSuccess
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
+		
+		System.out.println("-- Creating an account. Username: Arliden Sinclair; Password: 1234; Email Address: "
+				+ "connect.inc.hr@gmail.com --");
 		client.handleMessageFromTestCases("#createaccount <Arliden Sinclair, 1234; connect.inc.hr@gmail.com>");
 		try {
 		    Thread.sleep(5000);                 //1000 milliseconds is one second.
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
+		
+		System.out.println("-- Logging in. Username: Arliden Sinclair; Password: 1234 --");
 		client.handleMessageFromTestCases("#login <Arliden Sinclair, 1234>");
 		try {
 		    Thread.sleep(5000);                 //1000 milliseconds is one second.
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
+		
+		System.out.println("-- Submitting response to standards: yes --");
 		client.handleMessageFromTestCases("#submitqualificationresponse <yes>");
 		try {
 		    Thread.sleep(5000);                 //1000 milliseconds is one second.
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
+		
+		System.out.println("-- Submitting application: answering yes to every question --");
 		client.handleMessageFromTestCases("#submitapplication <yyyyy>");
 		try {
 		    Thread.sleep(5000);                 //1000 milliseconds is one second.
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
+		
+		System.out.println("-- Submitting request for interview: 08/05/15 4:00");
 		client.handleMessageFromTestCases("#submitschedulerequest <08/05/15 4:00>");
 		try {
 		    Thread.sleep(5000);                 //1000 milliseconds is one second.
@@ -56,6 +68,6 @@ public class TestCaseScheduleSuccess
 		}
 
 		
-		System.out.println("Test has been completed, an email has been sent if successful.");
+		System.out.println("Test has been completed, two emails have been sent if successful.");
 	}
 }

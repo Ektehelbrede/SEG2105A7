@@ -43,109 +43,156 @@ public class Server extends AbstractServer
 	{
 		String msg = message.toString();
 		
-		if (msg.startsWith("#connect"))
+		if (client.getInfo("loginstatus") == "true")	// User may use these commands after they have logged in.
 		{
-			try
+			if (msg.startsWith("#qualificationrequirements"))
 			{
-				client.sendToClient("Please choose from the following commands:"
-					+ "\n#createaccount <username, password; emailaddress>"
-					+ "\n#login <username, password>"
-					+ "\nUse the #help command for additional options.");
+				try{client.sendToClient("Requesting list of requirements...");}catch(IOException e){}
+				application.getQualificationRequirements((int)client.getInfo("index"));
 			}
-			catch (IOException e) {}
-		}
-		
-		else if (msg.startsWith("#help"))
-		{
-			try
+			
+			else if (msg.startsWith("#submitqualificationresponse"))
 			{
-				client.sendToClient("Here are some additional commands, please ensure that you"
-						+ " complete the application process in the correct order:"
-						+ "\n#qualificationrequirements" + "\nsubmitqualificationresponse <answer>"
-						+ "\n#requestapplication" 
-						+ "\n#submitapplication <1. answer 2. answer 3. answer 4. answer>"
-						+ "\n#availableappointments" + "\n#requestappointment <time>");
+				if (msg.contains("<") && msg.contains(">"))
+				{
+					try{client.sendToClient("Submitting response...");}catch(IOException e){}
+					application.submitQualificationResponse(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), 
+						(int)client.getInfo("index"));
+				}
+				
+				else
+				{
+					try{client.sendToClient("Please check the syntax of your response.");}catch(IOException e){}
+				}
 			}
-			catch (IOException e) {}
-		}
-		
-		else if (msg.startsWith("#createaccount"))
-		{
-			try{client.sendToClient("Creating account...");}catch(IOException e){}
-			application.createAccount(msg.substring(msg.indexOf("<") + 1, msg.indexOf(",")), 
-					msg.substring(msg.indexOf(",") + 1, msg.indexOf(";")), 
-					msg.substring(msg.indexOf(";") + 1, msg.indexOf(">")), client);
-		}
-		
-		else if (msg.startsWith("#login"))
-		{
-			try{client.sendToClient("Logging in...");}catch(IOException e){}
-			application.login(msg.substring(msg.indexOf("<") + 1, msg.indexOf(",")), 
-					msg.substring(msg.indexOf(",") + 1, msg.indexOf(">")), client);
-		}
-		
-		else if (msg.startsWith("#qualificationrequirements"))
-		{
-			try{client.sendToClient("Requesting list of requirements...");}catch(IOException e){}
-			application.getQualificationRequirements((int)client.getInfo("index"));
-		}
-		
-		else if (msg.startsWith("#submitqualificationresponse"))
-		{
-			try{client.sendToClient("Submitting response...");}catch(IOException e){}
-			application.submitQualificationResponse(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), 
-				(int)client.getInfo("index"));
-		}
-		
-		else if (msg.startsWith("#requestapplication"))
-		{
-			try{client.sendToClient("Requesting list of questions...");}catch(IOException e){}
-			application.getApplication((int)client.getInfo("index"));
-		}
-		
-		else if (msg.startsWith("#submitapplication"))
-		{
-			try{client.sendToClient("Submitting responses...");}catch(IOException e){}
-			application.submitApplication(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), (int)client.getInfo("index"));
-		}
-		
-		else if (msg.startsWith("#getmyinformation"))	// FOR DEBUGGING
-		{
-			try{client.sendToClient("GETTING CANDIDATE INFORMATION [DEBUGGING]...");}catch(IOException e){}
-			application.getCandidateInformation((int)client.getInfo("index"));
-		}
-		
-		else if (msg.startsWith("#requestschedule"))
-		{
-			try{client.sendToClient("Requesting available interview times...");}catch(IOException e){}
-			application.getSchedule((int)client.getInfo("index"));
-		}
-		
-		else if (msg.startsWith("#submitschedulerequest"))	
-		{
-			try{client.sendToClient("Submitting request...");}catch(IOException e){}
-			application.scheduleAppointment(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), (int)client.getInfo("index"));
-		}
-		
-		else if (msg.startsWith("#"))
-		{
-			try
+			
+			else if (msg.startsWith("#requestapplication"))
 			{
-				client.sendToClient("Invalid command, please try again.");
+				try{client.sendToClient("Requesting list of questions...");}catch(IOException e){}
+				application.getApplication((int)client.getInfo("index"));
 			}
-			catch (IOException e) {}
+			
+			else if (msg.startsWith("#submitapplication"))
+			{
+				if (msg.contains("<") && msg.contains(">"))
+				{
+					try{client.sendToClient("Submitting responses...");}catch(IOException e){}
+					application.submitApplication(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), (int)client.getInfo("index"));
+				}
+				
+				else
+				{
+					try{client.sendToClient("Please check the syntax of your response.");}catch(IOException e){}
+				}
+			}
+			
+			else if (msg.startsWith("#requestschedule"))
+			{
+				try{client.sendToClient("Requesting available interview times...");}catch(IOException e){}
+				application.getSchedule((int)client.getInfo("index"));
+			}
+			
+			else if (msg.startsWith("#submitschedulerequest"))	
+			{
+				if (msg.contains("<") && msg.contains(">"))
+				{
+					try{client.sendToClient("Submitting request...");}catch(IOException e){}
+					application.scheduleAppointment(msg.substring(msg.indexOf("<") + 1, msg.indexOf(">")), (int)client.getInfo("index"));
+				}
+				
+				else
+				{
+					try{client.sendToClient("Please check the syntax of your response.");}catch(IOException e){}
+				}
+			}	
+			
+			else if (msg.startsWith("#getmyinformation"))	// FOR DEBUGGING
+			{
+				try{client.sendToClient("GETTING CANDIDATE INFORMATION [DEBUGGING]...");}catch(IOException e){}
+				application.getCandidateInformation((int)client.getInfo("index"));
+			}
+		}
+		
+		else	// These commands are valid at any time.
+		{
+			if (msg.startsWith("#connect"))
+			{
+				try
+				{
+					client.sendToClient("Please choose from the following commands:"
+						+ "\n#createaccount <username, password; emailaddress>"
+						+ "\n#login <username, password>"
+						+ "\nUse the #help command for additional options.");
+				}
+				catch (IOException e) {}
+			}
+			
+			else if (msg.startsWith("#help"))
+			{
+				try
+				{
+					client.sendToClient("Here are some additional commands, please ensure that you"
+							+ " complete the application process in the correct order:"
+							+ "\n#qualificationrequirements" + "\nsubmitqualificationresponse <answer>"
+							+ "\n#requestapplication" 
+							+ "\n#submitapplication <1. answer 2. answer 3. answer 4. answer>"
+							+ "\n#availableappointments" + "\n#requestappointment <time>");
+				}
+				catch (IOException e) {}
+			}
+			
+			else if (msg.startsWith("#createaccount"))
+			{
+				if (msg.contains("<") && msg.contains(">") && msg.contains(";") && msg.contains(","))
+				{
+					try{client.sendToClient("Creating account...");}catch(IOException e){}
+					application.createAccount(msg.substring(msg.indexOf("<") + 1, msg.indexOf(",")), 
+							msg.substring(msg.indexOf(",") + 1, msg.indexOf(";")), 
+							msg.substring(msg.indexOf(";") + 1, msg.indexOf(">")), client);
+				}
+				
+				else
+				{
+					try{client.sendToClient("Please check the syntax of your response.");}catch(IOException e){}
+				}
+			}
+			
+			else if (msg.startsWith("#login"))
+			{
+				if (msg.contains("<") && msg.contains(">") && msg.contains(","))
+				{
+					try{client.sendToClient("Logging in...");}catch(IOException e){}
+					application.login(msg.substring(msg.indexOf("<") + 1, msg.indexOf(",")), 
+							msg.substring(msg.indexOf(",") + 1, msg.indexOf(">")), client);
+					client.setInfo("loginstatus", "true");
+				}
+				
+				else
+				{
+					try{client.sendToClient("Please check the syntax of your response.");}catch(IOException e){}
+				}
+			}
+			
+			else if (msg.startsWith("#"))
+			{
+				try
+				{
+					client.sendToClient("Invalid command, please ensure your are logged in and try again. ");
+				}
+				catch (IOException e) {}
+			}
 		}
 	}
 	
+	/**
+	 * This method handles any messages received from the application.
+	 * 
+	 * @param message The message received.
+	 * @param client The client to send the message to.
+	 */
 	public void handleMessageFromApplication
 		(Object message, ConnectionToClient client)
 	{
-		/*
-		 * COMMANDS:
-		 * message.toString().startsWith("#login") && client.getInfo("ID") == null, etc
-		 */
-		
-		// else
 		try
 		{
 			client.sendToClient(message);

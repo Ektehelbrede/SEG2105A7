@@ -9,11 +9,11 @@ import java.util.*;
  */
 public class Application 
 {
-	// Associations [RENAME THESE TO BETTER DESCRIBE WHAT THE ASSOCIATION IS.]
-	private List<Candidate> candidates;		// 1 -- * Candidate
-	private List<Standard> standards;		// 1 -- 2..* Standard
-	private List<Score> scores;				// 1 -- * Score
-	private List<Email> emails;				// 1 -- * Email
+	// Associations
+	private List<Candidate> candidates;		
+	private List<Standard> standards;		
+	private List<Score> scores;				
+	private List<Email> emails;				
 	private Schedule schedule;
 	
 	private Server server;	
@@ -28,6 +28,7 @@ public class Application
 		
 		this.server = server;
 		
+		// Default list of standards to be used. [From the problem description in Assignment 5.]
 		this.standards.add(new Standard("Are you a Canadian citizen, or have a valid work visa?", this));
 	}
 	
@@ -69,6 +70,15 @@ public class Application
 				client.setInfo("index", i);
 				sendMessageToServer("Successfully logged in.", client);
 				wasFound = true;
+				
+				if (candidates.get(i).getIsScheduled() == true) { sendMessageToServer("Welcome back. You currently have "
+						+ "an interview scheduled for: " + candidates.get(i).getScheduledTime().getTime(), client); }
+				else if (candidates.get(i).getMeetsMinimumScore() == true) { sendMessageToServer("Welcome back. Please use "
+						+ "the #requestschedule command to begin scheduling an interview.", client); }
+				else if (candidates.get(i).getIsQualified() == true) { sendMessageToServer("Welcome back. Please use "
+						+ "the #requestapplication command to begin the application process.", client); }
+				else { sendMessageToServer("Please use the #qualificationrequirements command to begin.", client); }
+				
 				break;
 			}
 			
@@ -149,7 +159,7 @@ public class Application
 				candidates.get(indexOfCandidate).getConnectionToCandidate());
 		}
 		
-		sendMessageToServer("Please use the command #submitapplication <aaaaaaa> to respond."
+		sendMessageToServer("Please use the command #submitapplication <aaaaa> to respond."
 			+ " Encode each 'a' with a y or n depending on your response to the question.",
 			candidates.get(indexOfCandidate).getConnectionToCandidate());
 	}
@@ -265,6 +275,11 @@ public class Application
 	}
 	
 	public void addQuestion(String description, int pointValue)
+	{
+		
+	}
+	
+	public void addInterviewTimeslot()
 	{
 		
 	}

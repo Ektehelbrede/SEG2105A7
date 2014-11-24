@@ -13,9 +13,9 @@ import java.util.*;
 public class Score 
 {
 	// Associations
-	private Application application;			// * -- 1 Application
-	private List<Question> listOfQuestions;		// 1 -- * Question
-	private Candidate candidate;				// 1 -- 1 Candidate
+	private Application application;			
+	private List<Question> listOfQuestions;		
+	private Candidate candidate;				
 	
 	// --------------
 	private final int MINIMUM_SCORE = 6;

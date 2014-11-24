@@ -8,9 +8,9 @@
 public class Candidate 
 {
 	// Associations
-	private Application application;	// * -- 1 Application
-	private Score score;				// 1 -- 1 Score
-	private Timeslot scheduledTime;		// 1 -- 1 Timeslot
+	private Application application;	
+	private Score score;				
+	private Timeslot scheduledTime;		
 	
 	// --------------
 	private String username;
@@ -66,7 +66,7 @@ public class Candidate
 			+ "ScoreAchieved: " + getScoreAchieved() + "\n"
 			+ "isQualified: " + getIsQualified() + "\n"
 			+ "meetsMinimumScore: " + getMeetsMinimumScore() + "\n"
-			+ "isScheduled: " + getIsScheduled()
+			+ "isScheduled: " + getIsScheduled() + "\n"
 			+ "Timeslot: " + getScheduledTime();
 				
 		return candidate;
