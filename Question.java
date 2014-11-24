@@ -2,7 +2,8 @@
  * A Question is worth a certain number of points, depending on 
  * the answer given.
  * 
- * @author 
+ * @author Daniel Rosales and Michael Mckee
+ * @version November 2014
  */
 public class Question 
 {
@@ -21,6 +22,7 @@ public class Question
 		
 	}
 	
+	// Get Methods
 	public String getDescription(){return description;}
 	public int getPointValue(){return pointValue;}
 }

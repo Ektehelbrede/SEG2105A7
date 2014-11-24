@@ -42,6 +42,7 @@ public class Server extends AbstractServer
 		(Object message, ConnectionToClient client)
 	{
 		String msg = message.toString();
+		msg = msg.toLowerCase();
 		
 		if (client.getInfo("loginstatus") == "true")	// User may use these commands after they have logged in.
 		{
@@ -208,12 +209,21 @@ public class Server extends AbstractServer
 	 */
 	public void handleMessageFromServerUI(Object message)
 	{
+		String msg = message.toString();
+		msg = msg.toLowerCase();
+		
 		// Check if message is intended to be a command.
 		if (message.toString().startsWith("#"))
 		{
-			/*
-			 * COMMANDS
-			 */
+			if (msg.startsWith("#addinterviewtime"))
+			{
+				if (msg.contains("<") && msg.contains(">") && msg.contains(","))
+				{
+					serverUI.display("Adding timeslot...");
+					application.addInterviewTimeslot(msg.substring(msg.indexOf("<") + 1, msg.indexOf(",")), 
+						msg.substring(msg.indexOf(",") + 1, msg.indexOf(">")));
+				}
+			}
 		}
 		
 		else

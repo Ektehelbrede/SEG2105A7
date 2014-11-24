@@ -39,6 +39,7 @@ public class Candidate
 		this.scoreAchieved = -1;
 	}
 	
+	// Get Methods
 	public String getUsername() { return this.username; }
 	public String getPassword() { return this.password; }
 	public String getEmailAddress() { return this.emailAddress; }
@@ -50,6 +51,7 @@ public class Candidate
 	public Score getScore() { return this.score; }
 	public Timeslot getScheduledTime() { return this.scheduledTime; }
 	
+	// Set Methods
 	public void setIsQualified(boolean qualified) { this.isQualified = qualified; }
 	public void setMeetsMinimumScore(boolean meetsMinimumScore) { this.meetsMinimumScore = meetsMinimumScore; }
 	public void setScore(Score score) { this.score = score; }
@@ -58,6 +60,12 @@ public class Candidate
 	public void setIsScheduled(boolean isScheduled) { this.isScheduled = isScheduled; }
 	public void setInterviewTime(Timeslot timeslot) { this.scheduledTime = timeslot; }
 	
+	/**
+	 * Creates a string representation of a Candidate to be used for debugging
+	 * purposes.
+	 * 
+	 * @return candidate A string representation of this candidate.
+	 */
 	public String toString()
 	{
 		String candidate = "Username: " + getUsername() + "\n"

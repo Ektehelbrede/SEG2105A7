@@ -60,6 +60,7 @@ public class Score
 		}
 	}
 	
+	// Get Methods
 	public String getQuestion(int indexOfQuestion)
 	{
 		return listOfQuestions.get(indexOfQuestion).getDescription();

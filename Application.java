@@ -99,7 +99,6 @@ public class Application
 	
 	/**
 	 * This method prints the various qualifications that are required to apply for an interview.
-	 * [NEEDS TO CHECK THAT THE USER EXISTS AND IS LOGGED IN.]
 	 * 
 	 * @param indexOfCandidate The index of the candidate in candidates.
 	 */
@@ -118,7 +117,6 @@ public class Application
 	
 	/**
 	 * This method determines if the user is qualified to submit an application.
-	 * [NEEDS TO CHECK THAT THE USER EXISTS AND IS LOGGED IN.]
 	 * 
 	 * @param response The client's response to the list of qualifications.
 	 * @param indexOfCandidate The index of the candidate in candidates.
@@ -145,7 +143,6 @@ public class Application
 	/**
 	 * This method prints the various questions the candidate must answer in order to complete the
 	 * application process.
-	 * [NEEDS TO CHECK THAT THE USER EXISTS, IS LOGGED IN, AND IS QUALIFIED.]
 	 * 
 	 * @param indexOfCandidate The index of the candidate in candidates.
 	 */
@@ -168,10 +165,9 @@ public class Application
 	 * This method receives the candidate's responses to the application questions, and calls
 	 * the evaluate method of that client's Score. If the client meets the minimum requirements
 	 * for an interview, an email will be sent requesting that they schedule one.
-	 * [NEEDS TO CHECK IF THE USER EXISTS, IS LOGGED IN, AND IS QUALIFIED.]
 	 * 
-	 * IF AN EXCEPTION TO THE CLIENT OCCURS WHEN SUBMITTING AN APPLICATION, PLEASE ENSURE THAT
-	 * ANY ANTI VIRUS IS TURNED OFF OR THIS PROGRAM IS WHITELISTED - THE EMAIL CANNOT BE SENT.
+	 * [IF AN EXCEPTION TO THE CLIENT OCCURS WHEN SUBMITTING AN APPLICATION, PLEASE ENSURE THAT
+	 * ANY ANTI VIRUS IS TURNED OFF OR THIS PROGRAM IS WHITELISTED - THE EMAIL CANNOT BE SENT.]
 	 * 
 	 * @param responses The candidates responses to be evaluated.
 	 * @param indexOfCandidate The index of the candidate in candidates.
@@ -237,7 +233,7 @@ public class Application
 	/**
 	 * Prints the candidate username, password, email address, and score achieved to
 	 * the Client. 
-	 * FOR DEBUGGING PURPOSES.
+	 * [FOR DEBUGGING PURPOSES.]
 	 * 
 	 * @param indexOfCandidate The index of the candidate in candidates to print information about.
 	 */
@@ -259,29 +255,68 @@ public class Application
 		server.handleMessageFromApplication(message, client);
 	}
 	
+	/**
+	 * This method creates (and thus sends) an email which either asks the user to schedule
+	 * an interview (if they have passed the application) or thanks the user for trying
+	 * (if they have not passed the application.
+	 * 
+	 * @param candidate The candidate to send the email to.
+	 */
 	public void sendRequestForInterviewEmail(Candidate candidate)
 	{
 		emails.add(new Email(candidate));
 	}
 	
+	/**
+	 * This method creates (and thus sends) an email confirming the appointment time
+	 * that the user scheduled an interview for.
+	 * 
+	 * @param candidate The candidate to send the email to.
+	 */
 	public void sendScheduleConfirmationEmail(Candidate candidate)
 	{
 		emails.add(new Email(candidate, candidate.getScheduledTime()));
 	}
 	
+	/**
+	 * Adds a qualification standard to the application process.
+	 * Should only be called when there are no users already in the process
+	 * of filling out an application (when a new round of applications is started).
+	 * 
+	 * [V2.0 IDEA ONLY]
+	 * 
+	 * @param description
+	 */
 	public void addStandard(String description)
 	{
 		
 	}
 	
+	/**
+	 * Adds a question to the application process.
+	 * Should only be called when there are no users already in the process
+	 * of filling out an application (when a new round of applications is started).
+	 * 
+	 * [V2.0 IDEA ONLY]
+	 * 
+	 * @param description
+	 * @param pointValue
+	 */
 	public void addQuestion(String description, int pointValue)
 	{
 		
 	}
 	
-	public void addInterviewTimeslot()
+	/**
+	 * Adds an interview time which users may select when scheduling an interview 
+	 * appointment.
+	 * 
+	 * @param time The time to add in the format dd/mm/yy hour:minute (ex. 09/12/16 2:00)
+	 * @param interviewer The name of the interviewer who will be conducting the interview.
+	 */
+	public void addInterviewTimeslot(String time, String interviewer)
 	{
-		
+		schedule.addInterviewTime(time, interviewer);
 	}
 }
 
