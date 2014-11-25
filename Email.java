@@ -156,7 +156,7 @@ public class Email
 			messageBodyPart.setContent(this.getBodyOfEmail(),"text/html");
 			multipart.addBodyPart(messageBodyPart);
 			messageBodyPart = new MimeBodyPart();
-			DataSource fds = new FileDataSource("C:/Users/Michael Mckee/Documents/GitHub/SEG2105A7/Logo.png");
+			DataSource fds = new FileDataSource("C:/Users/Daniel/workspace/PROJECT/Logo.png");
 			messageBodyPart.setDataHandler(new DataHandler (fds));
 			messageBodyPart.setHeader("Content-ID", "<image>");
 			

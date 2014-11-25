@@ -112,6 +112,15 @@ public class Server extends AbstractServer
 				try{client.sendToClient("GETTING CANDIDATE INFORMATION [DEBUGGING]...");}catch(IOException e){}
 				application.getCandidateInformation((int)client.getInfo("index"));
 			}
+			
+			else if (msg.startsWith("#"))
+			{
+				try
+				{
+					client.sendToClient("Invalid command, please refer to the #help command if you are unsure of what to do. ");
+				}
+				catch (IOException e) {}
+			}
 		}
 		
 		else	// These commands are valid at any time.
