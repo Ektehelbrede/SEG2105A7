@@ -92,7 +92,7 @@ public class Email
 				+ "like to request that you schedule an interview appointment at your "
 				+ "earliest convenience." + "</p>" + "<p>In order to schedule an appointment "
 				+ "please log into the account that you used to complete the application "
-				+ "questions with and use the <#requestschedule> function." + "</p>"
+				+ "questions with and use the #requestschedule function." + "</p>"
 				+ "<p>Thank you for considering Connect," + "</p>" + "<p>" + "Elayne Sinclair" + "<br>"
 				+ "Connect Human Resources Department</p>"
 				+ "<img src=\"cid:image\"/>";
@@ -156,7 +156,7 @@ public class Email
 			messageBodyPart.setContent(this.getBodyOfEmail(),"text/html");
 			multipart.addBodyPart(messageBodyPart);
 			messageBodyPart = new MimeBodyPart();
-			DataSource fds = new FileDataSource("C:/Users/Daniel/workspace/PROJECT/Logo.png");
+			DataSource fds = new FileDataSource("C:/Users/Michael Mckee/Documents/GitHub/SEG2105A7/Logo.png");
 			messageBodyPart.setDataHandler(new DataHandler (fds));
 			messageBodyPart.setHeader("Content-ID", "<image>");
 			

@@ -173,20 +173,22 @@ public class Application
 	 * @param indexOfCandidate The index of the candidate in candidates.
 	 */
 	public void submitApplication(String responses, int indexOfCandidate)
-	{if(candidates.get(indexOfCandidate).getIsQualified()){
-		candidates.get(indexOfCandidate).getScore().evaluate(responses);
-		sendMessageToServer("Successfully evaluated your application.",
-			candidates.get(indexOfCandidate).getConnectionToCandidate());
-		
-		sendMessageToServer("Sending an email.",
-			candidates.get(indexOfCandidate).getConnectionToCandidate());
-		sendRequestForInterviewEmail(candidates.get(indexOfCandidate));
-	}
-	else
-		//The application will warn the client if he or she hasn't fulfilled previous requirements
 	{
-		sendMessageToServer("Please fill out the qualification requirements before submitting your application.",candidates.get(indexOfCandidate).getConnectionToCandidate());
-	} 
+		if(candidates.get(indexOfCandidate).getIsQualified())
+		{
+			candidates.get(indexOfCandidate).getScore().evaluate(responses);
+			sendMessageToServer("Successfully evaluated your application.",
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+			
+			sendMessageToServer("Sending an email.",
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+			sendRequestForInterviewEmail(candidates.get(indexOfCandidate));
+		}
+		else 	//The application will warn the client if he or she hasn't fulfilled previous requirements
+		{
+			sendMessageToServer("Please fill out the qualification requirements before submitting your application.",
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
+		} 
 	}
 	
 	/**
@@ -215,32 +217,33 @@ public class Application
 	 * @param indexOfCandidate The index of the candidate in candidates.
 	 */
 	public void scheduleAppointment(String response, int indexOfCandidate)
-	{if(candidates.get(indexOfCandidate).getMeetsMinimumScore()){
-		boolean successfullyScheduled = schedule.scheduleInterview(response, candidates.get(indexOfCandidate));
-		
-		if (successfullyScheduled)
+	{
+		if(candidates.get(indexOfCandidate).getMeetsMinimumScore())
 		{
-			candidates.get(indexOfCandidate).setIsScheduled(true);
-			sendMessageToServer("Successfully scheduled an interview for: " + response
-				+ "\n" + "Sending a confirmation email to the address listed in your account.",
-				candidates.get(indexOfCandidate).getConnectionToCandidate());
-			sendScheduleConfirmationEmail(candidates.get(indexOfCandidate));
-		}
-		
-		else
-		{
-			sendMessageToServer("Your response was: " + response
-					+ "\n" + "This time is not currently available, please try to schedule again."
-					+ "\n" + "Use the command #requestschedule to print the list of available times again.",
+			boolean successfullyScheduled = schedule.scheduleInterview(response, candidates.get(indexOfCandidate));
+			
+			if (successfullyScheduled)
+			{
+				candidates.get(indexOfCandidate).setIsScheduled(true);
+				sendMessageToServer("Successfully scheduled an interview for: " + response
+					+ "\n" + "Sending a confirmation email to the address listed in your account.",
 					candidates.get(indexOfCandidate).getConnectionToCandidate());
-		}
+				sendScheduleConfirmationEmail(candidates.get(indexOfCandidate));
+			}
+			
+			else
+			{
+				sendMessageToServer("Your response was: " + response
+						+ "\n" + "This time is not currently available, please try to schedule again."
+						+ "\n" + "Use the command #requestschedule to print the list of available times again.",
+						candidates.get(indexOfCandidate).getConnectionToCandidate());
+			}
 		}
 	
-	else{
-		
-		sendMessageToServer("Invalid command.",candidates.get(indexOfCandidate).getConnectionToCandidate());
-		
-	}
+		else
+		{
+			sendMessageToServer("Invalid command.",candidates.get(indexOfCandidate).getConnectionToCandidate());
+		}
 	}
 	
 	/**
