@@ -234,15 +234,38 @@ public class Application
 			else
 			{
 				sendMessageToServer("Your response was: " + response
-						+ "\n" + "This time is not currently available, please try to schedule again."
-						+ "\n" + "Use the command #requestschedule to print the list of available times again.",
-						candidates.get(indexOfCandidate).getConnectionToCandidate());
+					+ "\n" + "This time is not currently available, please try to schedule again."
+					+ "\n" + "Use the command #requestschedule to print the list of available times again.",
+					candidates.get(indexOfCandidate).getConnectionToCandidate());
 			}
 		}
 	
 		else
 		{
 			sendMessageToServer("Invalid command.",candidates.get(indexOfCandidate).getConnectionToCandidate());
+		}
+	}
+	
+	/**
+	 * This method receives the candidate's request to cancel the appointment they have
+	 * already scheduled.
+	 * 
+	 * @param indexOfCandidate The index of the candidate in candidates.
+	 */
+	public void cancelAppointment(int indexOfCandidate)
+	{
+		boolean successfullyCancelled = schedule.cancelInterview(candidates.get(indexOfCandidate));
+		
+		if (candidates.get(indexOfCandidate).getIsScheduled() && successfullyCancelled)
+		{
+			candidates.get(indexOfCandidate).setIsScheduled(false);
+		}
+		
+		else
+		{
+			sendMessageToServer("The appointment was not successfully cancelled, please check your "
+				+ "syntax and try again.", 
+				candidates.get(indexOfCandidate).getConnectionToCandidate());
 		}
 	}
 	

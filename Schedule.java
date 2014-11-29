@@ -101,6 +101,26 @@ public class Schedule
 	}
 	
 	/**
+	 * Method which cancels an interview appointment.
+	 * 
+	 * @param candidate The candidate which requested the cancellation.
+	 */
+	public boolean cancelInterview(Candidate candidate)
+	{
+		boolean wasCancelled = false;
+		
+		int indexOfTimeslot = scheduledTimeslots.indexOf(candidate.getScheduledTime());
+		if (indexOfTimeslot != -1)
+		{
+			addToAvailableTimeslots(scheduledTimeslots.remove(indexOfTimeslot));
+			candidate.setInterviewTime(null);
+			wasCancelled = true;
+		}
+		
+		return wasCancelled;
+	}
+	
+	/**
 	 * Calls the method to add a new interview time to the list of available times.
 	 * Used by the server (Connect Inc). Creates a new Timeslot based on the 
 	 * provided information.
@@ -112,20 +132,5 @@ public class Schedule
 	{
 		addToAvailableTimeslots(new Timeslot(time, interviewer, null));
 	}
-	
-	/**
-	 * Method which cancelled an interview appointment.
-	 * 
-	 * [V2.0 IDEA ONLY]
-	 * 
-	 * @param response
-	 * @return
-	 */
-	public boolean cancelInterview(String response)
-	{
-		boolean wasRemoved = false;
-		
-		
-		return wasRemoved;
-	}
+
 }

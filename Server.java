@@ -107,6 +107,12 @@ public class Server extends AbstractServer
 				}
 			}	
 			
+			else if (msg.startsWith("#cancelappointment"))
+			{
+				try{client.sendToClient("Cancelling appointment...");}catch(IOException e){}
+				application.cancelAppointment((int)client.getInfo("index"));
+			}
+			
 			else if (msg.startsWith("#getmyinformation"))	// FOR DEBUGGING
 			{
 				try{client.sendToClient("GETTING CANDIDATE INFORMATION [DEBUGGING]...");}catch(IOException e){}
